@@ -21,11 +21,11 @@ class UsersController < ApplicationController
             render json: user, except: [:created_at, :updated_at]    
         else
             render json: { Message: 'User not found' }
-        end
+        end 
     end
 
     private 
     def user_params
         params.require(:user).permit!
     end
-end
+end 
