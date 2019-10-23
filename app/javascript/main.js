@@ -38,7 +38,7 @@ const addUser = function(event){
         email: event.target.elements.email.value
     }
 
-    API.post(newUser).then(user=> renderUser(user))
+    API.post(newUser).then(user=> renderUser(user)).then(user => console.log(user))
 
     event.target.reset()
 }
@@ -59,9 +59,21 @@ form.addEventListener('submit',addUser)
       users.forEach(user => renderUser(user))
     }
 
+    const renderScore = function(score){
+     const  p2 = document.createElement('p')
+     debugger
+      p2.innerText = score 
+
+     
+
+      
+    }
+
     const renderUser = function(user ){
         p = document.createElement('p')
-        p.innerText = user.name
+        // debugger
+        p.innerText = user.name + " " + user.scores.forEach(score => renderScore(score))
+        p.className = "leaderBoardName"
 
         leaderBoard = document.querySelector('#leaderBoard')
         leaderBoard.append(p)
@@ -69,6 +81,8 @@ form.addEventListener('submit',addUser)
     }
     
 getUsers()
+
+
 
 
 
