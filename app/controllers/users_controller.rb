@@ -7,6 +7,7 @@ class UsersController < ApplicationController
 
     def create
         user = User.create(user_params)
+        
         # if user.valid? 
         #     user.save
         # else 
@@ -28,4 +29,6 @@ class UsersController < ApplicationController
     def user_params
         params.require(:user).permit!
     end
+
+   
 end 
