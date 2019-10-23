@@ -16,7 +16,16 @@ class ScoresController < ApplicationController
 
     def create
         score = Score.create(score_params)
+        render json: score, except: [:created_at, :updated_at]
     end
+
+    def update
+
+        score = score.find_by(id: params[:id])
+        score.update(score_params)
+        
+    end
+
 private 
 
 def score_params

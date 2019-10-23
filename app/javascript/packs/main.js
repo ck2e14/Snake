@@ -14,25 +14,51 @@ const leaderBoard = document.querySelector('#leaderBoard')
       Accept: "application/json"
      }, 
      
-     body: JSON.stringify({score, user_id: newUser.id})
+     body: JSON.stringify({score_num: `${score}`, user_id: `${newUser.id}`})
     
     })}
-// debugger
+
+    const patchScore = function(newUser){
+      return fetch("http://localhost:3000/scores",{
+        method:"PATCH", 
+        headers: { "Content-Type" : "application/json",
+        Accept: "application/json"
+       }, 
+       
+       body: JSON.stringify({score_num: `${score}`, user_id: `${newUser.id}`})
+      
+      })}
+
     
-     
+
+
+
+// debugger
+    const patch = function(newUser){
+      return fetch("http://localhost:3000/users",{
+        method:"PATCH", 
+        headers: { "Content-Type" : "application/json",
+        Accept: "application/json"
+       },
+       body: JSON.stringify(newUser) 
+}).then(resp=>resp.json()).then(resp=>patchScore(resp))}
+
+    
         
     
     const post = function(newUser){
-        // debugger
+        // debugger;
        return fetch("http://localhost:3000/users",{
              method:"POST", 
              headers: { "Content-Type" : "application/json",
              Accept: "application/json"
             },
             body: JSON.stringify(newUser) 
-}).then(newUser=> API.postScore(newUser))
+}).then(resp=>resp.json()).then(resp=>postScore(resp))}
 
-} 
+// .then(newUser=> API.postScore(newUser))
+
+
 
 // debugger
 
@@ -43,7 +69,7 @@ const leaderBoard = document.querySelector('#leaderBoard')
     // debugger
    const API = {
        get,
-       post, postScore
+       post, postScore, patch
    }
 
 ////////////////////////////LOG IN PAGE\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -55,7 +81,7 @@ const addUser = function(event){
         name: event.target.elements.name.value,
         username: event.target.elements.username.value,
         email: event.target.elements.email.value,
-      
+        scores: [{score_num: score}]
     }
    
 
@@ -66,10 +92,29 @@ const addUser = function(event){
     event.target.reset()
 }
 
+const patchUser = function(event){
+  event.preventDefault()
+
+  const newUser = {
+      name: event.target.elements.name.value,
+      username: event.target.elements.username.value,
+      email: event.target.elements.email.value,
+      scores: [{score_num: score}]
+  }
+ 
+
+  API.patch(newUser, score)
 
 
 
-form = document.querySelector('form')
+  event.target.reset()
+}
+
+
+
+
+
+form = document.querySelector('.log-in-form')
 form.addEventListener('submit',addUser)
 
 
@@ -85,7 +130,7 @@ form.addEventListener('submit',addUser)
     
    
 
-    const renderUser = function(user ){
+    const renderUser = function(user){
         const h3 = document.createElement('h3')
         const p = document.createElement('p')
         
@@ -93,26 +138,35 @@ form.addEventListener('submit',addUser)
         const allScores = user.scores
        const highestScores = allScores.reduce((max, scores) => 
         scores.score_num> max? scores.score_num: max, 0);
-       debugger 
-
-  
-        
+      //  debugger 
         
         h3.innerText = user.name
         p.innerText= highestScores
     
         // .forEach(score =>renderScore(score))
         
-        
-     
+        userTotal = {
+
+        }
+    
        
         leaderBoard.append(h3, p)
+        
  
     }
-    
+
+
+    ////////CREATE TABLE\\\\\\
+
+
 getUsers()
+// generateTableHead
+// generateTable2()
 
+//////////////////////PATCH USER\\\\\\\\\\\\\\\\\\\\\
 
+patchForm =document.querySelector('.update-form')
+patchForm.addEventListener('submit',patchUser)
 
 
 
@@ -125,7 +179,7 @@ getUsers()
 
     const CANVAS_BORDER_COLOUR = 'black';
         const TURBO_CANVAS_BACKGROUND_COLOUR = 'darkred'
-    const CANVAS_BACKGROUND_COLOUR = "grey";
+    const CANVAS_BACKGROUND_COLOUR = 'darkseagreen';
     const SNAKE_COLOUR = 'lightgreen';
     const SNAKE_BORDER_COLOUR = 'darkgreen';
     const FOOD_COLOUR = 'black';
@@ -169,7 +223,7 @@ getUsers()
       if (didGameEnd()) return;
       setTimeout(function onTick() {
         changingDirection = false;
-        clearCanvas();
+        clearCanvas(); 
         drawFood();
         advanceSnake();
         drawSnake();
@@ -344,10 +398,10 @@ getUsers()
      * @param { object } event - The keydown event
      */
     function changeDirection(event) {
-      const LEFT_KEY = 37;
-      const RIGHT_KEY = 39;
-      const UP_KEY = 38;
-      const DOWN_KEY = 40;
+      const LEFT_KEY = 65;
+      const RIGHT_KEY = 68;
+      const UP_KEY = 87;
+      const DOWN_KEY = 83;
       /**
        * Prevent the snake from reversing
        * Example scenario:
