@@ -2,7 +2,7 @@ class UsersController < ApplicationController
     skip_before_action :verify_authenticity_token
     def index
         users = User.all
-        render json: users, except: [:created_at, :updated_at]
+       render json: UserSerializer.new(users).to_serialized_json
     end
 
     def create
@@ -12,7 +12,7 @@ class UsersController < ApplicationController
         # else 
         #     render :index
         # end
-        
+       
     end 
 
     def show
