@@ -1,30 +1,75 @@
 /////////////////////////API\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 const URL = "http://localhost:3000/users"
 
-
+const leaderBoard = document.querySelector('#leaderBoard')
 
     const get = function(){
     return fetch(URL).then(resp => resp.json())
     
     }
+    const postScore = function(newUser) { 
+      return fetch("http://localhost:3000/scores",{
+      method:"POST", 
+      headers: { "Content-Type" : "application/json",
+      Accept: "application/json"
+     }, 
+     
+     body: JSON.stringify({score_num: `${score}`, user_id: `${newUser.id}`})
+    
+    })}
+
+    const patchScore = function(newUser){
+      return fetch("http://localhost:3000/scores",{
+        method:"PATCH", 
+        headers: { "Content-Type" : "application/json",
+        Accept: "application/json"
+       }, 
+       
+       body: JSON.stringify({score_num: `${score}`, user_id: `${newUser.id}`})
+      
+      })}
+
+    
+
+
+
+// debugger
+    const patch = function(newUser){
+      return fetch("http://localhost:3000/users",{
+        method:"PATCH", 
+        headers: { "Content-Type" : "application/json",
+        Accept: "application/json"
+       },
+       body: JSON.stringify(newUser) 
+}).then(resp=>resp.json()).then(resp=>patchScore(resp))}
+
+    
+        
     
     const post = function(newUser){
-        // debugger
+        // debugger;
        return fetch("http://localhost:3000/users",{
              method:"POST", 
              headers: { "Content-Type" : "application/json",
              Accept: "application/json"
             },
             body: JSON.stringify(newUser) 
-})
-        
-    }
+}).then(resp=>resp.json()).then(resp=>postScore(resp))}
+
+// .then(newUser=> API.postScore(newUser))
+
+
+
+// debugger
+
+
+
 
     
     // debugger
    const API = {
        get,
-       post
+       post, postScore, patch
    }
 
 ////////////////////////////LOG IN PAGE\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -35,18 +80,41 @@ const addUser = function(event){
     const newUser = {
         name: event.target.elements.name.value,
         username: event.target.elements.username.value,
-        email: event.target.elements.email.value
+        email: event.target.elements.email.value,
+        scores: [{score_num: score}]
     }
+   
 
-    API.post(newUser).then(user=> renderUser(user)).then(user => console.log(user))
+    API.post(newUser, score)
+
+
 
     event.target.reset()
+}
+
+const patchUser = function(event){
+  event.preventDefault()
+
+  const newUser = {
+      name: event.target.elements.name.value,
+      username: event.target.elements.username.value,
+      email: event.target.elements.email.value,
+      scores: [{score_num: score}]
+  }
+ 
+
+  API.patch(newUser, score)
+
+
+
+  event.target.reset()
 }
 
 
 
 
-form = document.querySelector('form')
+
+form = document.querySelector('.log-in-form')
 form.addEventListener('submit',addUser)
 
 
@@ -58,31 +126,47 @@ form.addEventListener('submit',addUser)
     const renderUsers = function(users){
       users.forEach(user => renderUser(user))
     }
+    
+    
+   
 
-    const renderScore = function(score){
-     const  p2 = document.createElement('p')
-     debugger
-      p2.innerText = score 
+    const renderUser = function(user){
+        const h3 = document.createElement('h3')
+        const p = document.createElement('p')
+        
+        
+        const allScores = user.scores
+       const highestScores = allScores.reduce((max, scores) => 
+        scores.score_num> max? scores.score_num: max, 0);
+      //  debugger 
+        
+        h3.innerText = user.name
+        p.innerText= highestScores
+    
+        // .forEach(score =>renderScore(score))
+        
+        userTotal = {
 
-     
-
-      
-    }
-
-    const renderUser = function(user ){
-        p = document.createElement('p')
-        // debugger
-        p.innerText = user.name + " " + user.scores.forEach(score => renderScore(score))
-        p.className = "leaderBoardName"
-
-        leaderBoard = document.querySelector('#leaderBoard')
-        leaderBoard.append(p)
+        }
+    
+       
+        leaderBoard.append(h3, p)
+        
  
     }
-    
+
+
+    ////////CREATE TABLE\\\\\\
+
+
 getUsers()
+// generateTableHead
+// generateTable2()
 
+//////////////////////PATCH USER\\\\\\\\\\\\\\\\\\\\\
 
+patchForm =document.querySelector('.update-form')
+patchForm.addEventListener('submit',patchUser)
 
 
 
@@ -95,7 +179,7 @@ getUsers()
 
     const CANVAS_BORDER_COLOUR = 'black';
         const TURBO_CANVAS_BACKGROUND_COLOUR = 'darkred'
-    const CANVAS_BACKGROUND_COLOUR = "grey";
+    const CANVAS_BACKGROUND_COLOUR = 'darkseagreen';
     const SNAKE_COLOUR = 'lightgreen';
     const SNAKE_BORDER_COLOUR = 'darkgreen';
     const FOOD_COLOUR = 'black';
@@ -135,11 +219,11 @@ getUsers()
     document.addEventListener("keydown", pauseGame);
     
     function main() {
-      
+     
       if (didGameEnd()) return;
       setTimeout(function onTick() {
         changingDirection = false;
-        clearCanvas();
+        clearCanvas(); 
         drawFood();
         advanceSnake();
         drawSnake();
@@ -162,13 +246,13 @@ getUsers()
         if (score === 50) { game_speed = lvl4speed }
     }
 
-    function restartGame(event){
-        const key = event.keyCode;
-        const restartKey = 82
-        if (key === restartKey) {
-            location.reload();
-        }
-    }
+    // function restartGame(event){
+    //     const key = event.keyCode;
+    //     const restartKey = 82
+    //     if (key === restartKey) {
+    //         location.reload();
+    //     }
+    // }
     // build function that toggles on/off the turbo variable. Amend the relevant code elsewhere that says something like 'if turbo = true then x3 gamespeed'
     function toggleTurbo(event){
         const key = event.keyCode;
@@ -241,18 +325,24 @@ getUsers()
       } else {
        
         snake.pop();
+        console.log(score)
       }
     }
     
     function didGameEnd() {
+
+      
       for (let i = 4; i < snake.length; i++) {
         if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true
-      }
+      } 
+    
       const hitLeftWall = snake[0].x < 0;
       const hitRightWall = snake[0].x > gameCanvas.width - 10;
       const hitToptWall = snake[0].y < 0;
       const hitBottomWall = snake[0].y > gameCanvas.height - 10;
+      
       return hitLeftWall || hitRightWall || hitToptWall || hitBottomWall
+    
     }
     /**
      * Generates a random number that is a multiple of 10 given a minumum
@@ -308,10 +398,10 @@ getUsers()
      * @param { object } event - The keydown event
      */
     function changeDirection(event) {
-      const LEFT_KEY = 37;
-      const RIGHT_KEY = 39;
-      const UP_KEY = 38;
-      const DOWN_KEY = 40;
+      const LEFT_KEY = 65;
+      const RIGHT_KEY = 68;
+      const UP_KEY = 87;
+      const DOWN_KEY = 83;
       /**
        * Prevent the snake from reversing
        * Example scenario:

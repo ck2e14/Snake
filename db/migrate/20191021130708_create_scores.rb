@@ -1,7 +1,7 @@
 class CreateScores < ActiveRecord::Migration[6.0]
   def change
     create_table :scores do |t|
-      t.integer :score
+      t.integer :score_num
       t.references :user, foregin_key: true
 
       t.timestamps
