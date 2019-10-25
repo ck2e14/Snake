@@ -1,46 +1,57 @@
+// window.addEventListener('DOMContentLoaded', (event) => {
+//   showStartUp}
+// )
+
+// const showStartUp = function(){
+//   const startUp = document.querySelector('start-up-page')
+//   const body = document.querySelector('.body')
+//   body.style.display ="none"
+// }
+
+
+
+
+
+
 /////////////////////////API\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 const URL = "http://localhost:3000/users"
 
 const leaderBoard = document.querySelector('#leaderBoard')
 
-    const get = function(){
-    return fetch(URL).then(resp => resp.json())
-    
+const get = function(){
+   return fetch(URL).then(resp => resp.json()) 
     }
-    const postScore = function(newUser) { 
-      return fetch("http://localhost:3000/scores",{
-      method:"POST", 
-      headers: { "Content-Type" : "application/json",
-      Accept: "application/json"
-     }, 
+    
+const postScore = function(newUser) { 
+  return fetch("http://localhost:3000/scores",{
+  method:"POST", 
+  headers: { "Content-Type" : "application/json",
+  Accept: "application/json"
+  }, 
      
-     body: JSON.stringify({score_num: `${score}`, user_id: `${newUser.id}`})
+  body: JSON.stringify({score_num: `${score}`, user_id: `${newUser.id}`})
     
-    })}
+  })}
 
-    const patchScore = function(newUser){
-      return fetch("http://localhost:3000/scores",{
-        method:"PATCH", 
-        headers: { "Content-Type" : "application/json",
-        Accept: "application/json"
-       }, 
-       
-       body: JSON.stringify({score_num: `${score}`, user_id: `${newUser.id}`})
-      
-      })}
+const patchScore = function(newUser){
+  return fetch("http://localhost:3000/scores",{
+    method:"PATCH", 
+    headers: { "Content-Type" : "application/json",
+    Accept: "application/json"
+   }, 
+   
+   body: JSON.stringify({score_num: `${score}`, user_id: `${newUser.id}`})
+  
+  })}
 
-    
-
-
-
-// debugger
-    const patch = function(newUser){
-      return fetch("http://localhost:3000/users",{
-        method:"PATCH", 
-        headers: { "Content-Type" : "application/json",
-        Accept: "application/json"
-       },
-       body: JSON.stringify(newUser) 
+ 
+const patch = function(newUser){
+  return fetch("http://localhost:3000/users",{
+    method:"PATCH", 
+    headers: { "Content-Type" : "application/json",
+    Accept: "application/json"
+   },
+   body: JSON.stringify(newUser) 
 }).then(resp=>resp.json()).then(resp=>patchScore(resp))}
 
     
@@ -56,17 +67,6 @@ const leaderBoard = document.querySelector('#leaderBoard')
             body: JSON.stringify(newUser) 
 }).then(resp=>resp.json()).then(resp=>postScore(resp))}
 
-// .then(newUser=> API.postScore(newUser))
-
-
-
-// debugger
-
-
-
-
-    
-    // debugger
    const API = {
        get,
        post, postScore, patch
@@ -87,6 +87,7 @@ const addUser = function(event){
 
     API.post(newUser, score)
 
+    renderUser(newUser)
 
 
     event.target.reset()
@@ -131,42 +132,35 @@ form.addEventListener('submit',addUser)
    
 
     const renderUser = function(user){
-        const h3 = document.createElement('h3')
-        const p = document.createElement('p')
-        
-        
-        const allScores = user.scores
-       const highestScores = allScores.reduce((max, scores) => 
-        scores.score_num> max? scores.score_num: max, 0);
-      //  debugger 
-        
-        h3.innerText = user.name
-        p.innerText= highestScores
-    
-        // .forEach(score =>renderScore(score))
-        
-        userTotal = {
-
-        }
-    
+      
+      const h3 = document.createElement('h3')
+      const p = document.createElement('p')
+      const allScores = user.scores
+      const tableBody = document.querySelector('tbody')
+      const tr = document.createElement('tr')
+      const td = document.createElement('td')
+      const td2= document.createElement('td')
        
-        leaderBoard.append(h3, p)
+      const highestScores = allScores.reduce(
+      (max, scores) =>scores.score_num> max? scores.score_num: max, 0);
         
- 
+        td.innerText = user.name 
+        td2.innerText= highestScores
+      
+    
+       tr.append(td, td2)
+       tableBody.append(tr)
+       
+        // leaderBoard.append(h3, p
+        
     }
 
-
-    ////////CREATE TABLE\\\\\\
-
-
 getUsers()
-// generateTableHead
-// generateTable2()
 
 //////////////////////PATCH USER\\\\\\\\\\\\\\\\\\\\\
 
-patchForm =document.querySelector('.update-form')
-patchForm.addEventListener('submit',patchUser)
+// patchForm =document.querySelector('.update-form')
+// patchForm.addEventListener('submit',patchUser)
 
 
 
@@ -177,14 +171,15 @@ patchForm.addEventListener('submit',patchUser)
     let lvl3speed = 55;
     let lvl4speed = 45;
 
-    const CANVAS_BORDER_COLOUR = 'black';
+    const CANVAS_BORDER_COLOUR = 'orange';
         const TURBO_CANVAS_BACKGROUND_COLOUR = 'darkred'
-    const CANVAS_BACKGROUND_COLOUR = 'darkseagreen';
-    const SNAKE_COLOUR = 'lightgreen';
-    const SNAKE_BORDER_COLOUR = 'darkgreen';
-    const FOOD_COLOUR = 'black';
+    const CANVAS_BACKGROUND_COLOUR = 'lightblue';
+    const SNAKE_COLOUR = 'darkgreen';
+    const SNAKE_BORDER_COLOUR = '';
+    const FOOD_COLOUR = 'orange';
         const TURBO_FOOD_COLOUR = 'white'
     const FOOD_BORDER_COLOUR = 'darkred';
+    const TURBO_BACKGROUND_COLOUR = 'red'
     
     let snake = [
       {x: 150, y: 150},
@@ -246,22 +241,25 @@ patchForm.addEventListener('submit',patchUser)
         if (score === 50) { game_speed = lvl4speed }
     }
 
-    // function restartGame(event){
-    //     const key = event.keyCode;
-    //     const restartKey = 82
-    //     if (key === restartKey) {
-    //         location.reload();
-    //     }
-    // }
+    function restartGame(event){
+        const key = event.keyCode;
+        const restartKey = 191
+        if (key === restartKey) {
+            location.reload();
+        }
+    }
     // build function that toggles on/off the turbo variable. Amend the relevant code elsewhere that says something like 'if turbo = true then x3 gamespeed'
     function toggleTurbo(event){
+      console.log('turbo')
         const key = event.keyCode;
-        const turboKey = 32
+        const turboKey = 32;
         if (key === turboKey){
             if (turbo === 1){
                 turbo =  3
+                document.body.style.background = 'red' 
             } else {
                 turbo = 1
+                document.body.style.background = 'lilac'
             } 
         }
     }
@@ -288,6 +286,8 @@ patchForm.addEventListener('submit',patchUser)
         ctx.fillRect(0, 0, gameCanvas.width, gameCanvas.height);
        
         ctx.strokeRect(0, 0, gameCanvas.width, gameCanvas.height);
+        
+        
         }
     }
     
@@ -353,25 +353,15 @@ patchForm.addEventListener('submit',patchUser)
     function randomTen(min, max) {
       return Math.round((Math.random() * (max-min) + min) / 10) * 10;
     }
-    /**
-     * Creates random set of coordinates for the snake food.
-     */
     function createFood() {
-      // Generate a random number the food x-coordinate
       foodX = randomTen(0, gameCanvas.width - 10);
-      // Generate a random number for the food y-coordinate
       foodY = randomTen(0, gameCanvas.height - 10);
-      // if the new food location is where the snake currently is, generate a new food location
       snake.forEach(function isFoodOnSnake(part) {
         const foodIsoNsnake = part.x == foodX && part.y == foodY;
         if (foodIsoNsnake) createFood();
       });
     }
-    /**
-     * Draws the snake on the canvas
-     */
     function drawSnake() {
-      // loop through the snake parts drawing each part on the canvas
       snake.forEach(drawSnakePart)
     }
     /**
@@ -379,14 +369,9 @@ patchForm.addEventListener('submit',patchUser)
      * @param { object } snakePart - The coordinates where the part should be drawn
      */
     function drawSnakePart(snakePart) {
-      // Set the colour of the snake part
       ctx.fillStyle = SNAKE_COLOUR;
-      // Set the border colour of the snake part
       ctx.strokestyle = SNAKE_BORDER_COLOUR;
-      // Draw a "filled" rectangle to represent the snake part at the coordinates
-      // the part is located
       ctx.fillRect(snakePart.x, snakePart.y, 10, 10);
-      // Draw a border around the snake part
       ctx.strokeRect(snakePart.x, snakePart.y, 10, 10);
     }
     /**
@@ -401,7 +386,7 @@ patchForm.addEventListener('submit',patchUser)
       const LEFT_KEY = 65;
       const RIGHT_KEY = 68;
       const UP_KEY = 87;
-      const DOWN_KEY = 83;
+      const DOWN_KEY = 83 ;
       /**
        * Prevent the snake from reversing
        * Example scenario:
