@@ -24,28 +24,31 @@
 
 img{
   position: absolute;
-  top: 50%;
+  top: 40%;
   left: 50%;
   transform: translate(-50%, -50%);
   margin-top: 10%;
 }
   
 
-body {
+body , html {
     font-family:'nokia_cellphone_fcsmall' ;
+    width: 100%;
+    height: 100%;
   }
       #gameCanvas {
           position: absolute;
-          top: 50%;
+          top: 40%;
           left: 50%;
           transform: translate(-50%, -50%);
           margin-top:60px;
           background-image: 'https://img2.apk.tools/300/9/1/1/com.whiture.apps.classic.snakes.png';
           width: 165px;
           height: 200px;
+          border-radius: 10px;
 
         }
-  
+/*   
       #leaderBoardCanvas{
   
         position: absolute;
@@ -55,7 +58,7 @@ body {
           background-color:rgb(173, 216, 230, 0.7);
           margin-right: 250px;
       }
-  
+   */
       #score {
           text-align: center;
           font-size: 30px;
@@ -63,7 +66,7 @@ body {
         }
   
       #body {
-            background-color:rgb(165, 149, 184)
+            background-color:rgb(212, 176, 255)
         }
       
         
@@ -99,3 +102,46 @@ body {
         font-size: 40px;
       }
      
+      .log-in-form{
+
+        position: absolute;
+        top: 40%;
+        right: 0%;
+        transform: translate(-50%, -50%);
+        margin-top: 10%;
+        background-color: rgba(206, 0, 206, 0.699);
+        text-align: center;
+        padding: 1%;
+        border-color: darkblue;
+        border: 2px;
+      }
+      table {
+        background-color: purple;
+        border-color: black;
+      }
+
+      h3 {
+        text-align: center;
+      }
+
+      .instructions{
+        position: absolute;
+      
+        left: 85%;
+        transform: translate(-50%, -50%);
+        /* margin-top: 10%; */
+        background-color: rgba(206, 0, 206, 0.699);
+        text-align: center;
+        padding: 1%;
+      }
+
+      #leader-board{
+        text-align: center;
+      }
+
+      .footer{
+        clear: both;
+        position: relative;
+        height: 200px;
+        margin-top: -200px;
+      }
