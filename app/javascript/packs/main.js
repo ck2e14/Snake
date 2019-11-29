@@ -13,7 +13,7 @@
 
 
 
-/////////////////////////API\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+//////////////////////////API\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 const URL = "http://localhost:3000/users"
 
 const leaderBoard = document.querySelector('#leaderBoard')
